@@ -34,7 +34,7 @@ AppLoader::extend(function (BraceApp $app) {
         $data = str_replace(
             ["%%ENDPOINT_URL%%", "%%ERROR%%"],
             [
-                $app->request->getUri()->getScheme() . "://" . $app->request->getUri()->getHost() . "/formmail/send?subscription_id=$subscriptionId",
+                "//" . $app->request->getUri()->getHost() . "/formmail/send?subscription_id=$subscriptionId",
                 $error
             ],
             $data
