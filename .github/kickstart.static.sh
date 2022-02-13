@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-env
 
 PROGPATH="$( cd "$(dirname "$0")" ; pwd -P )"   # The absolute path to kickstart.sh
 PROJECT_PATH="$PWD"
