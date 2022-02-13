@@ -84,7 +84,7 @@ class MicxFormmail extends HTMLElement {
       sbe.addEventListener("click", (e) => {
 
         let formData = this._getFormData();
-        this._log("Micx formmailer ", this, "onclick event:", e, "formdata:" formData);
+        this._log("Micx formmailer ", this, "onclick event:", e, "formdata:", formData);
 
         if (this.invalidForms.length > 0) {
           console.warn("Form data is invalid", this.invalidForms);
