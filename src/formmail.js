@@ -45,6 +45,20 @@ class MicxFormmail extends HTMLElement {
     this.attrs[attrName] = newVal;
   }
 
+  show(selector) {
+    this._log("show(", selector, ")");
+    for (let sube of this.parentElement.querySelectorAll(selector)) {
+      sube.removeAttribute("hidden");
+    }
+  }
+
+  hide(selector) {
+    this._log("hide(", selector, ")");
+    for (let sube of this.parentElement.querySelectorAll(selector)) {
+        sube.setAttribute("hidden", "hidden");
+    }
+  }
+
   _getFormData() {
     this.invalidForms = [];
     let formdata = {};
@@ -93,6 +107,11 @@ class MicxFormmail extends HTMLElement {
             return;
           }
 
+          console.log(this);
+          this.dispatchEvent(new Event("waiting", {invalid_forms: this.invalidForms}));
+
+          sbe.setAttribute("disabled", "disabled");
+
           fetch(this.attrs.endpoint_url, {
             method: "POST",
             headers: {"content-type": "application/json"},
@@ -104,10 +123,11 @@ class MicxFormmail extends HTMLElement {
               console.log("Unable to send mail: Response", ret);
               return;
             }
+            sbe.removeAttribute("disabled");
             this._log("Micx formmailer ", this, "received ok from server", ret, "fireing success event");
-            this.dispatchEvent(new Event("success", {server_response: ret}));
-            fe.querySelector(this.attrs.ok_elem_selector)?.removeAttribute("hidden");
+            this.dispatchEvent(new Event("submit", {server_response: ret}));
           }).catch((e) => {
+            sbe.removeAttribute("disabled");
             this.dispatchEvent(new Event("error", {exception: e}));
             console.error("Micx Formmailer: request error:", e, "on element", fe);
             alert("Unable to send mail: Server Error.");
@@ -119,7 +139,8 @@ class MicxFormmail extends HTMLElement {
       for (let sube of this.querySelectorAll("*")) {
         sube.setAttribute("hidden", "hidden");
       }
-      
+
+      this.dispatchEvent(new Event("load", {"ref": this}));
     })
   }
 
