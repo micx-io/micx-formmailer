@@ -22,8 +22,8 @@ AppLoader::extend(function () {
 
     $app->define("app", new DiValue($app));
 
-    $app->define("subscriptionId", new DiService(function (array $query) {
-        $subscriptionId = $query["subscription_id"] ?? throw new \InvalidArgumentException("Paramter 'subscription_id' is missing");
+    $app->define("subscriptionId", new DiService(function (ServerRequestInterface $request) {
+        $subscriptionId = $request->getQueryParams()["subscription_id"] ?? throw new \InvalidArgumentException("Paramter 'subscription_id' is missing");
         if ( ! preg_match("/^[a-z0-9]+$/", $subscriptionId))
             throw new \InvalidArgumentException("Invalid subscription_id paramter value");
         return $subscriptionId;
