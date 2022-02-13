@@ -69,7 +69,7 @@ class MicxFormmail extends HTMLElement {
   }
 
   connectedCallback() {
-    document.addEventListener("DOMContentLoaded" () => {
+    document.addEventListener("DOMContentLoaded", () => {
       let fe = this.formEl = this.parentElement;
       this._log("Micx formmailer ", this, "initializing on form ", fe);
       if (fe.tagName !== "FORM")
