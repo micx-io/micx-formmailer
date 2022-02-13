@@ -1,4 +1,4 @@
 subscription_id: demo
 allow_origins:
-  - localhost
+  - http://localhost2
 template_url: http://localhost/demo/mailtemplate.txt
