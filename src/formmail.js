@@ -70,6 +70,7 @@ class MicxFormmail extends HTMLElement {
 
   connectedCallback() {
     let fe = this.formEl = this.parentElement;
+    this._log("Micx formmailer ", this, "initializing on form ", fe);
     if (fe.tagName !== "FORM")
       throw ["Invalid parent node tagName (!= 'form') on MicxFormmailer node: ", this, "Parent is", fe];
 
@@ -79,9 +80,12 @@ class MicxFormmail extends HTMLElement {
     });
 
     for (let sbe of fe.querySelectorAll("input[type='submit'], button[type='submit']")) {
+      this._log("Micx formmailer ", this, "attached to button", sbe);
       sbe.addEventListener("click", (e) => {
 
         let formData = this._getFormData();
+        this._log("Micx formmailer ", this, "onclick event:", e, "formdata:" formData);
+
         if (this.invalidForms.length > 0) {
           console.warn("Form data is invalid", this.invalidForms);
           this.dispatchEvent(new Event("invalid", {invalid_forms: this.invalidForms}));
@@ -99,6 +103,7 @@ class MicxFormmail extends HTMLElement {
             console.log("Unable to send mail: Response", ret);
             return;
           }
+          this._log("Micx formmailer ", this, "received ok from server", ret, "fireing success event");
           this.dispatchEvent(new Event("success", {server_response: ret}));
           fe.querySelector(this.attrs.ok_elem_selector)?.removeAttribute("hidden");
         }).catch((e) => {
