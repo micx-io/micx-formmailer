@@ -28,9 +28,7 @@ jobs:
 
       - name: Test
         run: |
-          cd test/
           ./../.kicker/kickstart.static.sh --offline :test
-          cd ..
 
       - name: Push
         run: |
