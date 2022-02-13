@@ -24,6 +24,7 @@ class MicxFormmail extends HTMLElement {
 
     this.attrs = {
       "service_id": "%%SERVICE_ID%%",
+      "error": "%%ERROR%%",
       "endpoint_url": "%%ENDPOINT_URL%%",
       "debug": false
     }
@@ -82,6 +83,11 @@ class MicxFormmail extends HTMLElement {
   }
 
   connectedCallback() {
+    if (this.attrs.error !== "") {
+      console.error("Error loading Micx Formmailer: " + this.attrs.error);
+      return false;
+    }
+    
     document.addEventListener("DOMContentLoaded", () => {
       let fe = this.formEl = this.parentElement;
       this._log("Micx formmailer ", this, "initializing on form ", fe);

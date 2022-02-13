@@ -16,16 +16,26 @@ use Laminas\Diactoros\Response\TextResponse;
 use Laminas\Diactoros\ResponseFactory;
 use Micx\FormMailer\Config\Config;
 use Phore\Mail\PhoreMailer;
+use Psr\Http\Message\ServerRequestInterface;
 
 AppLoader::extend(function (BraceApp $app) {
 
 
-    $app->router->on("GET@/formmail.js", function (BraceApp $app, string $subscriptionId, Config $config) {
+    $app->router->on("GET@/formmail.js", function (BraceApp $app, string $subscriptionId, Config $config, ServerRequestInterface $request) {
         $data = file_get_contents(__DIR__ . "/../src/formmail.js");
 
+        $error = "";
+        $origin = $request->getHeader("origin")[0] ?? null;
+        if ($origin !== null && ! in_array($origin, $config->allow_origins)) {
+            $error = "Invalid origin: '$origin' - not allowed for subscription_id '$subscriptionId'";
+        }
+        
         $data = str_replace(
-            ["%%ENDPOINT_URL%%"],
-            [$app->request->getUri()->getScheme() . "://" . $app->request->getUri()->getHost() . "/formmail/send?subscription_id=$subscriptionId"],
+            ["%%ENDPOINT_URL%%", "%%ERROR%%"],
+            [
+                $app->request->getUri()->getScheme() . "://" . $app->request->getUri()->getHost() . "/formmail/send?subscription_id=$subscriptionId",
+                $error
+            ],
             $data
         );
 
