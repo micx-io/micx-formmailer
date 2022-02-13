@@ -1,11 +1,11 @@
-## From: github.com/nfra-project/kickstart-skel
+## From: github.com/nfra-project/nfra-skel
 ##
 ## Build on push to braches
 ##
 ## Examples
 ## Branch: release/1.1   -> ghcr.io/some/repo:1.1
 
-name: UNSTABLE_build_and_push_to_github
+name: UNSTABLE_build_image_github
 
 ## SECURITY: Do not youe "pull_request_target" nr "pull_request" here! See
 ## https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
@@ -23,7 +23,22 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build
-        run: "CI_BUILD_NAME=unstable CI_REGISTRY_IMAGE=$CI_REGISTRY/$GITHUB_REPOSITORY ./.kicker/kickstart.static.sh ci-build"
+        run: |
+          docker build --pull -t test/image .
+
+      - name: Test
+        run: |
+          cd test/
+          ./../.kicker/kickstart.static.sh --offline :test
+          cd ..
+
+      - name: Push
+        run: |
+          CI_BUILD_NAME=unstable
+          CI_REGISTRY_IMAGE=$CI_REGISTRY/$GITHUB_REPOSITORY:$CI_BUILD_NAME
+          docker tag test/image $CI_REGISTRY_IMAGE
+          echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+          docker push $CI_REGISTRY_IMAGE
         env:
           CI_REGISTRY: ghcr.io
           CI_REGISTRY_USER: giblab-user
