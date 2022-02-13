@@ -25,13 +25,12 @@ class MicxFormmail extends HTMLElement {
     this.attrs = {
       "service_id": "%%SERVICE_ID%%",
       "endpoint_url": "%%ENDPOINT_URL%%",
-      "ok_elem_selector": "*[role='sent']",
       "debug": false
     }
   }
 
   static get observedAttributes() {
-      return ["service_id", "endpoint_url", "debug", "ok_elem_selector"];
+      return ["service_id", "endpoint_url", "debug"];
   }
 
   _log() {
@@ -96,7 +95,11 @@ class MicxFormmail extends HTMLElement {
 
       for (let sbe of fe.querySelectorAll("input[type='submit'], button[type='submit']")) {
         this._log("Micx formmailer ", this, "attached to button", sbe);
+        sbe.addEventListener("submit", (e) => { e.preventDefault(); e.stopPropagation() });
         sbe.addEventListener("click", (e) => {
+          // Prevent ENTER submit
+          if (e.explicitOriginalTarget !== sbe)
+            return false;
 
           let formData = this._getFormData();
           this._log("Micx formmailer ", this, "onclick event:", e, "formdata:", formData);
@@ -107,7 +110,7 @@ class MicxFormmail extends HTMLElement {
             return;
           }
 
-          console.log(this);
+
           this.dispatchEvent(new Event("waiting", {invalid_forms: this.invalidForms}));
 
           sbe.setAttribute("disabled", "disabled");
@@ -132,7 +135,9 @@ class MicxFormmail extends HTMLElement {
             console.error("Micx Formmailer: request error:", e, "on element", fe);
             alert("Unable to send mail: Server Error.");
           })
+          return false;
         })
+
       }
 
       // Hide everything inside
