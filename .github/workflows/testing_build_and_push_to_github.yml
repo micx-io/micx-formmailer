@@ -5,14 +5,15 @@
 ## Examples
 ## Branch: release/1.1   -> ghcr.io/some/repo:1.1
 
-name: RELEASE_build_and_push_to_github
+name: UNSTABLE_build_and_push_to_github
 
 ## SECURITY: Do not youe "pull_request_target" nr "pull_request" here! See
 ## https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 on:
   push:
     branches:
-      - release/[0-9]+.[0-9]+
+      - main
+      - master
 
 jobs:
   build_and_push_github:
@@ -33,7 +34,7 @@ jobs:
 
       - name: Push
         run: |
-          CI_BUILD_NAME=${GITHUB_REF#refs/heads/release/}
+          CI_BUILD_NAME=unstable
           CI_REGISTRY_IMAGE=$CI_REGISTRY/$GITHUB_REPOSITORY:$CI_BUILD_NAME
           docker tag test/image $CI_REGISTRY_IMAGE
           echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
