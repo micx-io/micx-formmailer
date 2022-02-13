@@ -29,5 +29,11 @@ jobs:
           CI_REGISTRY_USER: giblab-user
           CI_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
+      ## Used only if you have to notify a cluster
+      - name: DeployToCluster
+        run: "curl $DEPLOY_HOOK_URL"
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+
 
 
