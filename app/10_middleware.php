@@ -5,6 +5,7 @@ namespace App;
 
 use Brace\Body\BodyMiddleware;
 use Brace\Core\AppLoader;
+use Brace\Core\Base\ExceptionHandlerMiddleware;
 use Brace\Core\Base\JsonReturnFormatter;
 use Brace\Core\Base\NotFoundMiddleware;
 use Brace\Core\BraceApp;
@@ -24,7 +25,7 @@ AppLoader::extend(function (BraceApp $app) {
             return in_array($origin, $config->allow_origins);
         }),
 
-        // new ExceptionHandlerMiddleware(),
+        new ExceptionHandlerMiddleware(),
         new SessionMiddleware(new CookieSessionStorage("SECRET_KEY_ABCDEFG_ABCDEDF")),
         new RouterEvalMiddleware(),
         new RouterDispatchMiddleware([
