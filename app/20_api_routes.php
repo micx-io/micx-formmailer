@@ -25,11 +25,12 @@ AppLoader::extend(function (BraceApp $app) {
         $data = file_get_contents(__DIR__ . "/../src/formmail.js");
 
         $error = "";
-        $origin = $request->getHeader("origin")[0] ?? null;
-        if ($origin !== null && ! in_array($origin, $config->allow_origins)) {
+        $origin = $request->getHeader("referer")[0] ?? null;
+        if ($origin !== null && ! in_array(substr($origin, 0, -1), $config->allow_origins)) {
+            $origin = substr($origin, 0, -1);
             $error = "Invalid origin: '$origin' - not allowed for subscription_id '$subscriptionId'";
         }
-        
+
         $data = str_replace(
             ["%%ENDPOINT_URL%%", "%%ERROR%%"],
             [
