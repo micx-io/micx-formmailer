@@ -1,0 +1,20 @@
+version: 1
+from: "ghcr.io/nfra-project/kickstart-flavor-php:unstable"
+ports: "80:80"
+
+packages: [php8.0-curl, php8.0-http, php8.0-raphf, php8.0-redis, php8.0-sqlite]
+
+config_file:
+  template: "config.php.dist"
+  target: "config.php"
+
+command:
+  build:
+    - "composer update"
+    - "sudo mkdir /data && sudo chmod 777 /data"
+
+
+  run:
+  dev:
+  test:
+    - "vendor/bin/phpunit tests/"

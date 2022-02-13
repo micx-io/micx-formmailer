@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Micx Formmailer test</title>
+</head>
+<body>
+
+    <form method="post">
+        <micx-formmail onerror="alert('unable');">
+            <div>Das Mailsystem steht zur Zeit nicht zur Verfügung</div>
+        </micx-formmail>
+        <input type="text" name="name1" required>
+        <input type="text" name="name2">
+        <div role="sent" hidden>Mail gesendet!</div>
+        <input type="submit" value="Send">
+    </form>
+    <script src="/formmail.js?subscription_id=demo"></script>
+</body>
+</html>
