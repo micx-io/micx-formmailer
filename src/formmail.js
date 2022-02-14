@@ -106,9 +106,12 @@ class MicxFormmail extends HTMLElement {
           this._log("Micx formmailer ", this, "onclick event:", e);
 
           // Prevent ENTER submit
-          if (e.explicitOriginalTarget !== sbe) {
-            return false;
+          if (typeof e.explicitOriginalTarget !== "undefined") {
+            if (e.explicitOriginalTarget !== sbe) {
+              return false;
+            }
           }
+          
           let formData = this._getFormData();
 
           if (this.invalidForms.length > 0) {
