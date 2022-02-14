@@ -87,7 +87,7 @@ class MicxFormmail extends HTMLElement {
       console.error("Error loading Micx Formmailer: " + this.attrs.error);
       return false;
     }
-    
+
     document.addEventListener("DOMContentLoaded", () => {
       let fe = this.formEl = this.parentElement;
       this._log("Micx formmailer ", this, "initializing on form ", fe);
@@ -103,12 +103,13 @@ class MicxFormmail extends HTMLElement {
         this._log("Micx formmailer ", this, "attached to button", sbe);
         sbe.addEventListener("submit", (e) => { e.preventDefault(); e.stopPropagation() });
         sbe.addEventListener("click", (e) => {
-          // Prevent ENTER submit
-          if (e.explicitOriginalTarget !== sbe)
-            return false;
+          this._log("Micx formmailer ", this, "onclick event:", e);
 
+          // Prevent ENTER submit
+          if (e.explicitOriginalTarget !== sbe) {
+            return false;
+          }
           let formData = this._getFormData();
-          this._log("Micx formmailer ", this, "onclick event:", e, "formdata:", formData);
 
           if (this.invalidForms.length > 0) {
             console.warn("Form data is invalid", this.invalidForms);
