@@ -1,6 +1,6 @@
 FROM ghcr.io/nfra-project/kickstart-flavor-php:unstable
 ENV DEV_CONTAINER_NAME="micx-formmailer"
-ENV DATA_PATH="/data"
+ENV CONFIG_PATH="/config"
 
 ADD / /opt
 RUN ["bash", "-c",  "chown -R user /opt"]
