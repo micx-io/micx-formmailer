@@ -26,7 +26,6 @@ AppLoader::extend(function (BraceApp $app) {
         }),
 
         new ExceptionHandlerMiddleware(),
-        new SessionMiddleware(new CookieSessionStorage("SECRET_KEY_ABCDEFG_ABCDEDF")),
         new RouterEvalMiddleware(),
         new RouterDispatchMiddleware([
             new JsonReturnFormatter($app)

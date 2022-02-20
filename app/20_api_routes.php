@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 AppLoader::extend(function (BraceApp $app) {
 
 
-    $app->router->on("GET@/formmail.js", function (BraceApp $app, string $subscriptionId, Config $config, ServerRequestInterface $request) {
+    $app->router->on("GET@/v1/formmail/formmail.js", function (BraceApp $app, string $subscriptionId, Config $config, ServerRequestInterface $request) {
         $data = file_get_contents(__DIR__ . "/../src/formmail.js");
 
         $error = "";
@@ -34,7 +34,7 @@ AppLoader::extend(function (BraceApp $app) {
         $data = str_replace(
             ["%%ENDPOINT_URL%%", "%%ERROR%%"],
             [
-                "//" . $app->request->getUri()->getHost() . "/formmail/send?subscription_id=$subscriptionId",
+                "//" . $app->request->getUri()->getHost() . "/v1/formmail/send?subscription_id=$subscriptionId",
                 $error
             ],
             $data
@@ -43,7 +43,7 @@ AppLoader::extend(function (BraceApp $app) {
         return $app->responseFactory->createResponseWithBody($data, 200, ["Content-Type" => "application/javascript"]);
     });
 
-    $app->router->on("POST@/formmail/send", function(array $body, Config $config) {
+    $app->router->on("POST@/v1/formmail/send", function(array $body, Config $config) {
         $mailer = new PhoreMailer();
 
         $tpl = phore_http_request($config->template_url)->send(true)->getBody();
@@ -60,7 +60,7 @@ AppLoader::extend(function (BraceApp $app) {
     });
 
 
-    $app->router->on("GET@/", function() {
+    $app->router->on("GET@/v1/formmail", function() {
         return ["system" => "micx formmailer", "status" => "ok"];
     });
 
