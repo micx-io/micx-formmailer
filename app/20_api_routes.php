@@ -26,8 +26,7 @@ AppLoader::extend(function (BraceApp $app) {
 
         $error = "";
         $origin = $request->getHeader("referer")[0] ?? null;
-        if ($origin !== null && ! in_array(substr($origin, 0, -1), $config->allow_origins)) {
-            $origin = substr($origin, 0, -1);
+        if ($origin !== null && ! origin_match($origin, $config->allow_origins)) {
             $error = "Invalid origin: '$origin' - not allowed for subscription_id '$subscriptionId'";
         }
 

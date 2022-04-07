@@ -22,7 +22,7 @@ AppLoader::extend(function (BraceApp $app) {
     $app->setPipe([
         new BodyMiddleware(),
         new CorsMiddleware([], function (string $subscriptionId, Config $config, string $origin) {
-            return in_array($origin, $config->allow_origins);
+            return origin_match($origin, $config->allow_origins);
         }),
 
         new ExceptionHandlerMiddleware(),
