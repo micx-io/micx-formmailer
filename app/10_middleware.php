@@ -30,7 +30,7 @@ AppLoader::extend(function (BraceApp $app) {
         new CorsMiddleware([], function (T_Subscription $subscription, string $origin) {
             return $subscription->isAllowedOrigin($origin);
         }),
-
+        new ExceptionHandlerMiddleware(),
         new RouterDispatchMiddleware([
             new JsonReturnFormatter($app)
         ]),

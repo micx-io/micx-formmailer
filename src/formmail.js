@@ -51,12 +51,12 @@ class MicxFormmail extends HTMLElement {
         this.innerHTML = "";
 
         fe.addEventListener("click", async (e) => {
-            console.log ("micx", e);
+            log("click event", e);
             if (typeof e.explicitOriginalTarget === "undefined")
                 return false;
             if ( ! MicxFormmail.isFormButtonDescendant(e.explicitOriginalTarget))
                 return false;
-            console.log ("micx in", e);
+            log ("button submit click event", e);
             e.preventDefault();
             e.target.setAttribute("disabled", "disabled");
 
