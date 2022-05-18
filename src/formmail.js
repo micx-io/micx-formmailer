@@ -39,8 +39,6 @@ class MicxFormmail extends HTMLElement {
         let log = MicxFormmail.log;
         let fe = this.formEl = this.parentElement;
 
-
-
         log("Micx formmailer ", this, "initializing on form ", fe);
         if (fe.tagName !== "FORM")
             throw ["Invalid parent node tagName (!= 'form') on MicxFormmailer node: ", this, "Parent is", fe];
@@ -53,11 +51,10 @@ class MicxFormmail extends HTMLElement {
         this.innerHTML = "";
 
         fe.addEventListener("click", async (e) => {
-            if (typeof e.explicitOriginalTarget !== "undefined") {
-                if (e.explicitOriginalTarget.getAttribute("type") !== "submit") {
-                    return false;
-                }
-            }
+            if (typeof e.explicitOriginalTarget === "undefined")
+                return false;
+            if ( ! MicxFormmail.isFormButtonDescendant(e.explicitOriginalTarget))
+                return false;
             e.preventDefault();
             e.target.setAttribute("disabled", "disabled");
 
@@ -95,12 +92,20 @@ MicxFormmail.config = {
         "service_id": "%%SERVICE_ID%%",
         "error": "%%ERROR%%",
         "endpoint_url": "%%ENDPOINT_URL%%",
-        "debug": true
+        "debug": false
 }
 
 MicxFormmail.log = function () {
     if (MicxFormmail.config.debug !== false)
         console.log.apply(this, arguments);
+}
+
+MicxFormmail.isFormButtonDescendant = function (element) {
+    if (element instanceof HTMLBodyElement)
+        return false;
+    if (element.type === "submit")
+        return true;
+    return MicxFormmail.isFormButtonDescendant(element.parentElement);
 }
 
 
