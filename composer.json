@@ -22,7 +22,8 @@
     "phore/unidb": "*",
     "phore/hydrator": "*",
     "phore/http-client": "*",
-    "phore/mail": "*"
+    "phore/mail": "*",
+    "lack/subscription": "dev-main"
   },
   "require-dev": {
     "phore/tester": "*"

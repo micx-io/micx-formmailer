@@ -31,7 +31,7 @@ class MicxFormmail extends HTMLElement {
   }
 
   static get observedAttributes() {
-      return ["service_id", "endpoint_url", "debug"];
+    return ["service_id", "endpoint_url", "debug"];
   }
 
   _log() {
@@ -55,7 +55,7 @@ class MicxFormmail extends HTMLElement {
   hide(selector) {
     this._log("hide(", selector, ")");
     for (let sube of this.parentElement.querySelectorAll(selector)) {
-        sube.setAttribute("hidden", "hidden");
+      sube.setAttribute("hidden", "hidden");
     }
   }
 
@@ -73,11 +73,20 @@ class MicxFormmail extends HTMLElement {
       }
       let name = el.name;
       if (name === "")
-          name = el.id;
+        name = el.id;
+      name = name.trim();
+
 
       if (el.type === "checkbox" && el.checked === false)
         continue;
-      formdata[name] = el.value;
+      if (name.endsWith("[]")) {
+        name = name.slice(0, -2);
+        if (!Array.isArray(formdata[name]))
+          formdata[name] = [];
+        formdata[name].push(el.value);
+      } else {
+        formdata[name] = el.value;
+      }
     }
     return formdata;
   }
@@ -101,7 +110,10 @@ class MicxFormmail extends HTMLElement {
 
       for (let sbe of fe.querySelectorAll("input[type='submit'], button[type='submit']")) {
         this._log("Micx formmailer ", this, "attached to button", sbe);
-        sbe.addEventListener("submit", (e) => { e.preventDefault(); e.stopPropagation() });
+        sbe.addEventListener("submit", (e) => {
+          e.preventDefault();
+          e.stopPropagation()
+        });
         sbe.addEventListener("click", (e) => {
           this._log("Micx formmailer ", this, "onclick event:", e);
 
@@ -111,7 +123,7 @@ class MicxFormmail extends HTMLElement {
               return false;
             }
           }
-          
+
           let formData = this._getFormData();
 
           if (this.invalidForms.length > 0) {
@@ -125,7 +137,11 @@ class MicxFormmail extends HTMLElement {
 
           sbe.setAttribute("disabled", "disabled");
 
-          fetch(this.attrs.endpoint_url, {
+          let preset = "default";
+          if (this.hasAttribute("preset"))
+            preset = this.getAttribute("preset")
+
+          fetch(this.attrs.endpoint_url + `&preset=${preset}`, {
             method: "POST",
             headers: {"content-type": "application/json"},
             body: JSON.stringify(formData),
@@ -158,8 +174,6 @@ class MicxFormmail extends HTMLElement {
       this.dispatchEvent(new Event("load", {"ref": this}));
     })
   }
-
-
 
 
 }

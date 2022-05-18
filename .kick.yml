@@ -1,5 +1,5 @@
 version: 1
-from: "ghcr.io/nfra-project/kickstart-flavor-php:unstable"
+from: "ghcr.io/nfra-project/kickstart-flavor-php:8.0"
 ports: "80:80"
 
 packages: [php8.0-curl, php8.0-http, php8.0-raphf, php8.0-redis, php8.0-sqlite]

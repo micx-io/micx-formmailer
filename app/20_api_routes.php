@@ -11,30 +11,28 @@ use Lack\OidServer\Base\Ctrl\SignInCtrl;
 use Lack\OidServer\Base\Ctrl\LogoutCtrl;
 use Lack\OidServer\Base\Ctrl\TokenCtrl;
 use Lack\OidServer\Base\Tpl\HtmlTemplate;
+use Lack\Subscription\Type\T_Subscription;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\TextResponse;
 use Laminas\Diactoros\ResponseFactory;
+use Laminas\Diactoros\ServerRequest;
 use Micx\FormMailer\Config\Config;
+use Micx\FormMailer\Config\T_Formmailer;
 use Phore\Mail\PhoreMailer;
 use Psr\Http\Message\ServerRequestInterface;
 
 AppLoader::extend(function (BraceApp $app) {
 
 
-    $app->router->on("GET@/v1/formmailer/formmail.js", function (BraceApp $app, string $subscriptionId, Config $config, ServerRequestInterface $request) {
+    $app->router->on("GET@/v1/formmailer/formmail.js", function (BraceApp $app, ServerRequestInterface $request) {
         $data = file_get_contents(__DIR__ . "/../src/formmail.js");
 
-        $error = "";
-        $origin = $request->getHeader("referer")[0] ?? null;
-        if ($origin !== null && ! origin_match($origin, $config->allow_origins)) {
-            $error = "Invalid origin: '$origin' - not allowed for subscription_id '$subscriptionId'";
-        }
-
+        $subscriptionId = $request->getQueryParams()["subscription_id"] ?? throw new \InvalidArgumentException("Missing parameter subscription_id");
         $data = str_replace(
             ["%%ENDPOINT_URL%%", "%%ERROR%%"],
             [
-                "//" . $app->request->getUri()->getHost() . "/v1/formmailer/send?subscription_id=$subscriptionId",
-                $error
+                "//" . $app->request->getUri()->getHost() . "/v1/formmailer/send?subscription_id={$subscriptionId}",
+                ""
             ],
             $data
         );
@@ -42,15 +40,28 @@ AppLoader::extend(function (BraceApp $app) {
         return $app->responseFactory->createResponseWithBody($data, 200, ["Content-Type" => "application/javascript"]);
     });
 
-    $app->router->on("POST@/v1/formmailer/send", function(array $body, Config $config) {
+    $app->router->on("POST@/v1/formmailer/send", function(array $body, T_Subscription $subscription,  ServerRequest $request) {
         $mailer = new PhoreMailer();
 
-        $tpl = phore_http_request($config->template_url)->send(true)->getBody();
+        $preset = $request->getQueryParams()["preset"] ?? "default";
 
-        $body["__DATA__"] = "";
+        $config = $subscription->getClientPrivateConfig(null, T_Formmailer::class);
+
+        $template = $config->templates[$preset] ?? throw new \InvalidArgumentException("No template defined for preset '$preset'");
+
+        $tpl = phore_http_request($template->template_url)->send(true)->getBody();
+
+        $bodyDataStr = "";
         foreach ($body as $key => $value) {
-            $body["__DATA__"] .= "\n\n$key: $value";
+            if (is_array($value)) {
+                foreach ($value as $key2 => $value2) {
+                    $bodyDataStr .= "\n\n$key.$key2: $value2";
+                }
+            } else {
+                $bodyDataStr .= "\n\n$key: $value";
+            }
         }
+        $body["__DATA__"] = $bodyDataStr;
 
         $mailer->setSmtpDirectConnect("micx.host");
         $mailer->send($tpl, $body);

@@ -2,6 +2,12 @@
 
 define("DEV_MODE", (bool)"%DEV_MODE?0%");
 
+define("CONF_SUBSCRIPTION_ENDPOINT", "%CONF_SUBSCRIPTION_ENDPOINT?/opt/mock/sub%");
+define("CONF_SUBSCRIPTION_CLIENT_ID", "%CONF_SUBSCRIPTION_CLIENT_ID?micx-formmailer%");
+define("CONF_SUBSCRIPTION_CLIENT_SECRET", "%CONF_SUBSCRIPTION_CLIENT_SECRET?%");
+
+define("CONF_SMTP_SENDER_HOST", "%CONF_SMTP_SENDER_HOST?ws.micx.io%");
+
 if (DEV_MODE === true) {
     define("CONFIG_PATH", "/opt/cfg");
 } else {

@@ -14,6 +14,8 @@ use Brace\Router\RouterDispatchMiddleware;
 use Brace\Router\RouterEvalMiddleware;
 use Brace\Session\SessionMiddleware;
 use Brace\Session\Storages\CookieSessionStorage;
+use Lack\Subscription\Brace\SubscriptionMiddleware;
+use Lack\Subscription\Type\T_Subscription;
 use Micx\FormMailer\Config\Config;
 
 
@@ -21,12 +23,14 @@ AppLoader::extend(function (BraceApp $app) {
 
     $app->setPipe([
         new BodyMiddleware(),
-        new CorsMiddleware([], function (string $subscriptionId, Config $config, string $origin) {
-            return origin_match($origin, $config->allow_origins);
-        }),
-
         new ExceptionHandlerMiddleware(),
         new RouterEvalMiddleware(),
+        new SubscriptionMiddleware(),
+
+        new CorsMiddleware([], function (T_Subscription $subscription, string $origin) {
+            return $subscription->isAllowedOrigin($origin);
+        }),
+
         new RouterDispatchMiddleware([
             new JsonReturnFormatter($app)
         ]),
