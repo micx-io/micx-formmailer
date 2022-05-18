@@ -48,7 +48,8 @@ class MicxFormmail extends HTMLElement {
             e.preventDefault();
         });
 
-        this.innerHTML = "";
+
+        this.setAttribute("hidden", "hidden");
 
         fe.addEventListener("click", async (e) => {
             log("click event", e);
