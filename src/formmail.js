@@ -53,7 +53,6 @@ class MicxFormmail extends HTMLElement {
         this.innerHTML = "";
 
         fe.addEventListener("click", async (e) => {
-            log("click", e);
             if (typeof e.explicitOriginalTarget !== "undefined") {
                 if (e.explicitOriginalTarget.getAttribute("type") !== "submit") {
                     return false;
