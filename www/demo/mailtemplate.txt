@@ -1,6 +1,6 @@
 {mail to="matthes@leuffen.de" name="Matthias Leuffen"}
 {mail from="sender@address.de" name="Me"}
-{mail replyto="test@domain.de" name="Some Name"}
+{mail replyto=email name=name}
 {mail charset="utf-8"}
 {subject}Anfrage {=name}{/subject}
 

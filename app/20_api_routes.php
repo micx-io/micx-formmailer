@@ -63,7 +63,7 @@ AppLoader::extend(function (BraceApp $app) {
         }
         $body["__DATA__"] = $bodyDataStr;
 
-        $mailer->setSmtpDirectConnect("micx.host");
+        $mailer->setSmtpDirectConnect(CONF_SMTP_SENDER_HOST);
         $mailer->send($tpl, $body);
 
         return ["ok"];
