@@ -142,20 +142,24 @@ MicxFormmail.sendMail = function (data, preset="default") {
     let log = MicxFormmail.log;
     return new Promise(async (resolve, reject) => {
         log(`sending to preset ${preset}`, data)
-        let result = await fetch(MicxFormmail.config.endpoint_url + `&preset=${preset}`, {
-            method: "POST",
-            headers: {"content-type": "application/json"},
-            body: JSON.stringify(data),
-            cache: "no-cache"
-        });
-        if ( ! result.ok) {
-            let errorMsg = await result.text();
-            log(`Server Error`, errorMsg);
-            return reject("Cannot send mail: " + errorMsg);
+        try {
+            let result = await fetch(MicxFormmail.config.endpoint_url + `&preset=${preset}`, {
+                method: "POST",
+                headers: {"content-type": "application/json"},
+                body: JSON.stringify(data),
+                cache: "no-cache"
+            });
+            if ( ! result.ok) {
+                let errorMsg = await result.text();
+                log(`Server Error`, errorMsg);
+                return reject("Cannot send mail: " + errorMsg);
+            }
+            let successMsg = await result.json();
+            log(`message sent`, successMsg);
+            return resolve(successMsg);
+        } catch (e) {
+            return reject(e);
         }
-        let successMsg = await result.json();
-        log(`message sent`, successMsg);
-        return resolve(successMsg);
     });
 }
 
