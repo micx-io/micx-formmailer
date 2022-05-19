@@ -58,9 +58,10 @@ class MicxFormmail extends HTMLElement {
                 if ( ! MicxFormmail.isFormButtonDescendant(e.explicitOriginalTarget))
                    return false;
             } else {
+                // Chrome
                 if ( ! MicxFormmail.isFormButtonDescendant(e.target))
                     return false;
-                if (e.pointerType !== '')
+                if (e.pointerType === '')
                     return false;
             }
 
