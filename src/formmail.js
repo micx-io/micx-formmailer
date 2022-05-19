@@ -53,10 +53,17 @@ class MicxFormmail extends HTMLElement {
 
         fe.addEventListener("click", async (e) => {
             log("click event", e);
-            if (typeof e.explicitOriginalTarget === "undefined")
-                return false;
-            if ( ! MicxFormmail.isFormButtonDescendant(e.explicitOriginalTarget))
-                return false;
+            if (typeof e.explicitOriginalTarget !== "undefined") {
+                // Safari & Firefox
+                if ( ! MicxFormmail.isFormButtonDescendant(e.explicitOriginalTarget))
+                   return false;
+            } else {
+                if ( ! MicxFormmail.isFormButtonDescendant(e.target))
+                    return false;
+                if (e.pointerType !== '')
+                    return false;
+            }
+
             log ("button submit click event", e);
             e.preventDefault();
             e.target.setAttribute("disabled", "disabled");
