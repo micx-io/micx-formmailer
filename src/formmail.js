@@ -95,7 +95,7 @@ MicxFormmail.config = {
         "service_id": "%%SERVICE_ID%%",
         "error": "%%ERROR%%",
         "endpoint_url": "%%ENDPOINT_URL%%",
-        "debug": false
+        "debug": true
 }
 
 MicxFormmail.log = function () {
