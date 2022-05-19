@@ -62,7 +62,7 @@ class MicxFormmail extends HTMLElement {
                 if ( ! MicxFormmail.isFormButtonDescendant(e.target))
                     return false;
                 if (e.pointerType === '')
-                    return false;
+                    return false; // Triggered by Enter in Input Form
             }
 
             log ("button submit click event", e);
@@ -103,7 +103,7 @@ MicxFormmail.config = {
         "service_id": "%%SERVICE_ID%%",
         "error": "%%ERROR%%",
         "endpoint_url": "%%ENDPOINT_URL%%",
-        "debug": true
+        "debug": false
 }
 
 MicxFormmail.log = function () {
