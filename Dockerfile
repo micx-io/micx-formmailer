@@ -1,4 +1,4 @@
-FROM ghcr.io/nfra-project/kickstart-flavor-php:8.0
+FROM ghcr.io/nfra-project/kickstart-flavor-php:8.1
 ENV DEV_CONTAINER_NAME="micx-formmailer"
 ENV CONFIG_PATH="/config"
 
