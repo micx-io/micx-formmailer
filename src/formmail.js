@@ -179,4 +179,46 @@ MicxFormmail.sendMail = function (data, preset="default") {
     });
 }
 
+
+document.addEventListener("submit", async (e) => {
+    let form = e.target.closest("form");
+    if (form === null)
+        return;
+    if ( ! form.hasAttribute("data-micx-formmail-preset"))
+        return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    let submitButton = form.querySelector("[type='submit']");
+    submitButton.setAttribute("disabled", "disabled");
+
+    let formdata, invalid;
+    [formdata, invalid] = MicxFormmail.collectFormData(form);
+    if (invalid.length > 0) {
+        console.warn("Form data is invalid", invalid);
+        this.dispatchEvent(new Event("invalid", {invalid_forms: invalid}));
+        form.querySelectorAll("[role='form_data_invalid']").forEach((e) => e.removeAttribute("hidden"));
+
+        submitButton.removeAttribute("disabled");
+        return;
+    }
+    this.dispatchEvent(new Event("waiting", {invalid_forms: invalid}));
+    let preset = form.getAttribute("data-micx-formmail-preset");
+    if (preset === "")
+        preset = "default";
+
+    try {
+        let result = await MicxFormmail.sendMail(formdata, preset);
+        this.dispatchEvent(new Event("submit", {ok: result}));
+        form.querySelectorAll("[role='form_error']").forEach((e) => e.setAttribute("hidden", "hidden"));
+        form.querySelectorAll("[role='form_data_invalid']").forEach((e) => e.setAttribute("hidden", "hidden"));
+        form.querySelectorAll("[role='form_success']").forEach((e) => e.removeAttribute("hidden", "hidden"));
+    } catch (e) {
+        form.querySelectorAll("[role='form_error']").forEach((e) => e.removeAttribute("hidden", "hidden"));
+        this.dispatchEvent(new Event("error", {error: e}));
+        submitButton.removeAttribute("disabled");
+    }
+})
+
+
 customElements.define("micx-formmail", MicxFormmail);

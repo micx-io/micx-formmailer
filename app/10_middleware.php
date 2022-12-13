@@ -12,11 +12,9 @@ use Brace\Core\BraceApp;
 use Brace\CORS\CorsMiddleware;
 use Brace\Router\RouterDispatchMiddleware;
 use Brace\Router\RouterEvalMiddleware;
-use Brace\Session\SessionMiddleware;
-use Brace\Session\Storages\CookieSessionStorage;
 use Lack\Subscription\Brace\SubscriptionMiddleware;
 use Lack\Subscription\Type\T_Subscription;
-use Micx\FormMailer\Config\Config;
+
 
 
 AppLoader::extend(function (BraceApp $app) {
