@@ -179,7 +179,6 @@ MicxFormmail.sendMail = function (data, preset="default") {
     });
 }
 
-
 document.addEventListener("submit", async (e) => {
     let form = e.target.closest("form");
     if (form === null)
@@ -188,9 +187,35 @@ document.addEventListener("submit", async (e) => {
         return;
     e.preventDefault();
     e.stopPropagation();
+    // Stop Form submit from hitting enter
 
+})
+document.addEventListener("click", async (e) => {
+    if (e.target.closest("button") === null || e.target.closest("button").getAttribute("type") !== "submit") {
+        return;
+    }
+    let form = e.target.closest("form");
+    if (form === null)
+        return;
+    if ( ! form.hasAttribute("data-micx-formmail-preset"))
+        return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof e.explicitOriginalTarget !== "undefined") {
+        // Safari & Firefox
+        if ( ! MicxFormmail.isFormButtonDescendant(e.explicitOriginalTarget))
+            return false;
+    } else {
+        // Chrome
+        if ( ! MicxFormmail.isFormButtonDescendant(e.target))
+            return false;
+        if (e.pointerType === '')
+            return false; // Triggered by Enter in Input Form
+    }
     let submitButton = form.querySelector("[type='submit']");
     submitButton.setAttribute("disabled", "disabled");
+
+    form.querySelectorAll(".is-invalid").forEach(e => e.classList.remove("is-invalid"));
 
     let formdata, invalid;
     [formdata, invalid] = MicxFormmail.collectFormData(form);
@@ -198,7 +223,7 @@ document.addEventListener("submit", async (e) => {
         console.warn("Form data is invalid", invalid);
         this.dispatchEvent(new Event("invalid", {invalid_forms: invalid}));
         form.querySelectorAll("[role='form_data_invalid']").forEach((e) => e.removeAttribute("hidden"));
-
+        invalid.forEach((e) => e.classList.add("is-invalid"));
         submitButton.removeAttribute("disabled");
         return;
     }
@@ -218,6 +243,8 @@ document.addEventListener("submit", async (e) => {
         this.dispatchEvent(new Event("error", {error: e}));
         submitButton.removeAttribute("disabled");
     }
+
+
 })
 
 
