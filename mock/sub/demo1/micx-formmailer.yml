@@ -6,3 +6,5 @@ private:
   templates:
     default:
       template_url: http://localhost/demo/mailtemplate.txt
+    notpl:
+      mail_to: matthes@leuffen.de

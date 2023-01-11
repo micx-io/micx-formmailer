@@ -5,7 +5,12 @@ namespace Micx\FormMailer\Config;
 class T_Preset
 {
     /**
-     * @var string
+     * @var string|null
      */
-    public string $template_url;
+    public ?string $mail_to = null;
+
+    /**
+     * @var string|null
+     */
+    public ?string $template_url = null;
 }

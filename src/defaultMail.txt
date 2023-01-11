@@ -1,0 +1,38 @@
+{mail from="no-reply@ws.micx.io" name="leuffen.de webservices"}
+{mail replyto=email name=name}
+{mail charset="utf-8"}
+{subject}Online Anfrage von {=vorname} {=nachname}{/subject}
+
+{html}
+<body>
+    <style>
+        table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+        table tr {
+            border-bottom: 1px solid black;
+        }
+    </style>
+    <table style="background-color: #FFFFFF; width: 100%; max-width: 800px; font-family: sans-serif" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+            <tr style="background-color: lightblue;">
+                <td colspan="2"><b>Anfrage</b></td>
+            </tr>
+
+            {for elem in dataArray}
+            <tr>
+                <td>{= elem.key}:</td>
+                <td>{= elem.value}</td>
+            </tr>
+            {/for}
+
+        </tbody>
+    </table>
+</body>
+{/html}
+
+Anfrage:
+--------
+
+{=__DATA__}
