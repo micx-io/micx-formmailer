@@ -161,7 +161,7 @@ MicxFormmail.sendMail = function (data, preset="default") {
         try {
             let result = await fetch(MicxFormmail.config.endpoint_url + `&preset=${preset}`, {
                 method: "POST",
-                headers: {"content-type": "application/json"},
+                headers: {"content-type": "application/json", "x-sender-hostname": window.location.href},
                 body: JSON.stringify(data),
                 cache: "no-cache"
             });
