@@ -156,12 +156,13 @@ MicxFormmail.collectFormData = function (formElem) {
 
 MicxFormmail.sendMail = function (data, preset="default") {
     let log = MicxFormmail.log;
+    data["sending_hostname"] = window.location.href;
     return new Promise(async (resolve, reject) => {
         log(`sending to preset ${preset}`, data)
         try {
             let result = await fetch(MicxFormmail.config.endpoint_url + `&preset=${preset}`, {
                 method: "POST",
-                headers: {"content-type": "application/json", "x-sender-hostname": window.location.href},
+                headers: {"content-type": "application/json"},
                 body: JSON.stringify(data),
                 cache: "no-cache"
             });

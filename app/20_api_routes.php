@@ -55,7 +55,7 @@ AppLoader::extend(function (BraceApp $app) {
 
         $bodyDataStr = "";
         $dataArray = [];
-        $body["x-sender-hostname"] = $request->getHeader("x-sender-hostname")[0] ?? "unknown";
+
         foreach ($body as $key => $value) {
 
             if (is_array($value)) {
@@ -75,7 +75,6 @@ AppLoader::extend(function (BraceApp $app) {
         $mailer->setSmtpDirectConnect(CONF_SMTP_SENDER_HOST);
 
 
-        $mailer->phpmailer->addCustomHeader("X-Sender-Hostname", $request->getHeader("x-sender-hostname")[0] ?? "unknown");
         if ($template->mail_to !== null) {
             $mailer->phpmailer->addAddress($template->mail_to);
         }
