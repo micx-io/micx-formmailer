@@ -27,3 +27,4 @@ Ajax Formmailer
     <button type="submit">Send mail</button>
 </form>
 ```
+
