@@ -1,7 +1,7 @@
 {mail from="no-reply@ws.micx.io" name="leuffen.de webservices"}
 {mail replyto=email name=name}
 {mail charset="utf-8"}
-{subject}Online Anfrage von {=name} {=email}{/subject}
+{subject}Online Anfrage von {=name} {=company}{/subject}
 
 {html}
 <body>
