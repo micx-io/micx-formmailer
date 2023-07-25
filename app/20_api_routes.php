@@ -57,7 +57,6 @@ AppLoader::extend(function (BraceApp $app) {
         $dataArray = [];
 
         foreach ($body as $key => $value) {
-
             if (is_array($value)) {
                 foreach ($value as $key2 => $value2) {
                     $bodyDataStr .= "\n\n$key.$key2: $value2";
