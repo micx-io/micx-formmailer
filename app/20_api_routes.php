@@ -72,7 +72,7 @@ AppLoader::extend(function (BraceApp $app) {
         $body["dataArray"] = $dataArray;
 
         $mailer->setSmtpDirectConnect(CONF_SMTP_SENDER_HOST);
-        $mailer->phpmailer->SMTPDebug = true;
+        $mailer->phpmailer->SMTPDebug = false;
 
 
         if ($template->mail_to !== null) {
