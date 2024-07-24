@@ -9,6 +9,7 @@ Ajax Formmailer
 ## Usage Example
 
 
+
 ```html
 <form method="post">
     <micx-formmail
