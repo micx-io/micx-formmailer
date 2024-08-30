@@ -5,7 +5,6 @@ Ajax Formmailer
 
 - [Boostrap5 usage demo](www/demo/bootstrap5.html)
 
-
 ## Usage Example
 
 
