@@ -8,6 +8,30 @@ Ajax Formmailer
 ## Usage Example
 
 
+| name-Attribute | type | description                                             |
+|----------------|------|---------------------------------------------------------|
+| mailto         | email | The alternative email address to send the form data to. |
+| email          | email | The senders reply to address                            |
+| name           | text  | The senders name                                        |
+
+
+## Example config
+
+```jaml
+active: true
+public:
+  host_config: abc
+
+private:
+  templates:
+    default:
+      allow_mailto:
+        - "*@@"
+      mail_to: fallback@domain.de
+
+
+```
+
 
 ```html
 <form method="post">

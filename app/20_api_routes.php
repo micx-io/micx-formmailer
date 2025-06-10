@@ -68,6 +68,16 @@ AppLoader::extend(function (BraceApp $app) {
                 $dataArray[] = ["key" => $key, "value" => $value];
             }
         }
+
+        $mailto = $template->mail_to ?? null;
+        if (isset($body["mailto"]) && $body["mailto"] !== "") {
+            $mailto = $body["mailto"];
+            if ($template->checkMailto($mailto) !== true) {
+                throw new \InvalidArgumentException("mailto address '$mailto' is not allowed by preset");
+            }
+        }
+
+
         $body["__DATA__"] = $bodyDataStr;
         $body["dataArray"] = $dataArray;
 
@@ -75,8 +85,9 @@ AppLoader::extend(function (BraceApp $app) {
         $mailer->phpmailer->SMTPDebug = false;
 
 
-        if ($template->mail_to !== null) {
-            $mailer->phpmailer->addAddress($template->mail_to);
+        if ($mailto !== null) {
+            $mailer->phpmailer->clearAddresses();
+            $mailer->phpmailer->addAddress($mailto);
         }
         $mailer->prepare($tpl, $body);
 

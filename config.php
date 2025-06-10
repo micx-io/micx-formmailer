@@ -14,5 +14,3 @@ if (DEV_MODE === true) {
     define("CONFIG_PATH", "/config");
 }
 
-
-

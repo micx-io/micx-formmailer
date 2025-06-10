@@ -5,6 +5,8 @@ public:
 private:
   templates:
     default:
-      template_url: http://localhost/demo/mailtemplate.txt
+      allow_mailto:
+       # - "*@@"
+      mail_to: matthes@leuffen.de
     notpl:
       mail_to: matthes@leuffen.de

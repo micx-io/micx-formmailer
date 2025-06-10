@@ -1,8 +1,7 @@
 version: 1
-from: "ghcr.io/nfra-project/kickstart-flavor-php:8.1"
+from: "ghcr.io/nfra-project/kickstart-flavor-php:8.3"
 ports: "80:80"
-
-packages: [php8.1-curl, php8.1-http, php8.1-raphf, php8.1-redis, php8.1-sqlite]
+secrets: open_ai
 
 config_file:
   template: "config.php.dist"
