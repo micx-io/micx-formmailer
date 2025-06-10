@@ -26,8 +26,7 @@
     "lack/subscription": "dev-main"
   },
   "require-dev": {
-    "phore/tester": "dev-master",
-    "lack/kindergarden": "^1.0.16"
+    "phore/tester": "dev-master"
   },
   "suggest": {
   },
