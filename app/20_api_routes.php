@@ -80,6 +80,8 @@ AppLoader::extend(function (BraceApp $app) {
 
         $body["__DATA__"] = $bodyDataStr;
         $body["dataArray"] = $dataArray;
+        $body["name"] = $body["name"] ?? $body["Name"] ?? null;
+        $body["company"] = $body["company"] ?? $body["firma"] ?? $body["type"] ?? null;
 
         $mailer->setSmtpDirectConnect(CONF_SMTP_SENDER_HOST);
         $mailer->phpmailer->SMTPDebug = false;
