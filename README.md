@@ -15,6 +15,7 @@ Ajax Formmailer
 | name           | text  | The senders name                                        |
 
 
+
 ## Example config
 
 ```jaml
